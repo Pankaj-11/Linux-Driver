@@ -1,0 +1,104 @@
+net=0
+display_menu() {
+    echo "MENU CARD"
+    echo "1.IDLY              Rs:10"
+    echo "2.DHOSA             Rs:20"
+    echo "3.PONGAL            Rs:30"
+    echo "4.BUROTTA           Rs:25"
+    echo "5.CHICKEN RICE      Rs:80"
+    echo "6.EGG RICE          Rs:60"
+    echo "7.BOORI             Rs:30"
+    echo "8.CHAPATHI          Rs:40"
+    echo "9.CHICKEN BIRIYANI  Rs:100"
+    echo "10.MUTTON BIRIYANI  Rs:200"
+}
+
+display_menu
+while true; do
+
+    echo -n "Enter Your Choice : "
+    read ch
+
+    case $ch in
+        1)
+            echo "You selected IDLY"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 10))
+            ;;
+        2)
+            echo "You selected DHOSA"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 20))
+            ;;
+        3)
+            echo "You selected PONGAL"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 30))
+            ;;
+        4)
+            echo "You selected BUROTTA"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 25))
+            ;;
+        5)
+            echo "You selecteD CHICKEN RICE"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 80))
+            ;;
+        6)
+            echo "You Selected EGG RICE"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 60))
+            ;;
+        7)
+            echo "You Selected BOORI"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 30))
+            ;;
+        8)
+            echo "You Selected CHAPPATHI"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 40))
+            ;;
+        9)
+            echo "You Selected CHICKEN BIRIYANI"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 100))
+            ;;
+        10)
+            echo "You Selected UTTON BIRIYANI"
+
+            echo -n "Enter the Quantity --> "
+            read qty
+            net=$((net + qty * 200))
+
+            ;;
+    esac
+
+       echo -n "Do you want to continue? Press 1 : "
+    read i
+    if [ $i -ne 1 ]; then
+        break
+    fi
+done
+
+echo "Total Amount : $net"
+echo "Thank You Come Again"
