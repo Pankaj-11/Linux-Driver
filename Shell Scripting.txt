@@ -1,0 +1,38 @@
+Shell Scripting
+
+ ./ filename to execute the file
+# is used for comment in shell scripting
+
+
+greatings = "Hello World"
+ 
+a = 10
+ 
+echo $greatings
+ 
+ 
+let "number += 1"
+ 
+echo $number
+ 
+number = $(expr $number +1)
+echo number
+ 
+ 
+array=(one two three)
+ 
+echo ${array[0]}
+ 
+echo ${array[*]}
+ 
+echo ${#array[@]}
+ 
+ 
+declare -A asso_arr
+ 
+asso_arr[foo] = India
+asso_arr[hello] = Linux
+ 
+echo ${asso_arr[hello]}
+ 
+echo ${!asso_arr[@]}vi  
