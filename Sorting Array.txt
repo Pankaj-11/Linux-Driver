@@ -1,0 +1,20 @@
+# Define the array of numbers
+numbers=(5 3 9 1 7)
+
+# Sort the array in ascending order
+sorted_asc=($(for num in "${numbers[@]}"; do echo "$num"; done | sort -n))
+
+# Print the sorted array in ascending order
+echo "Sorted numbers in ascending order:"
+for num in "${sorted_asc[@]}"; do
+    echo "$num"
+done
+
+# Sort the array in descending order
+sorted_desc=($(for num in "${numbers[@]}"; do echo "$num"; done | sort -nr))
+
+# Print the sorted array in descending order
+echo "Sorted numbers in descending order:"
+for num in "${sorted_desc[@]}"; do
+    echo "$num"
+done
