@@ -1,0 +1,40 @@
+isPalindrome() {
+        str=$1
+        reverse=$(echo $str | rev)
+        if [ "$str" = "$reverse" ]; then
+                echo "$str is a palindrome"
+        else
+                echo "$str is not a palindrome"
+        fi
+}
+
+isNumberPalindrome() {
+        num=$1
+        reverse=$(echo $num | rev)
+        if [ "$num" = "$reverse" ]; then
+                echo "$num is a palindrome"
+        else
+                echo "$num is not palindrome"
+        fi
+}
+
+hasSpecialCharacters() {
+        str=$1
+        if [[ "$str" =~ [^a-zA-Z0-9] ]]; then
+                echo "$str contains special characters"
+        else
+                          echo "$str does not special characters"
+        fi
+}
+
+echo "Enter a string:"
+read input_string
+isPalindrome "$input_string"
+
+echo "Enter a number:"
+read input_number
+isNumberPalindrome "$input_number"
+
+echo "Enter a stringto check for speical character:"
+read input_string_special
+hasSpecialCharacters "$input_string_special"
