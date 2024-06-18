@@ -1,0 +1,109 @@
+#include<linux/module.h>
+#include<linux/fs.h>
+#include<linux/blkdev.h>
+#include<linux/genhd.h>
+#include<linux/hdreg.h>
+
+static int major_number=0;
+
+static struct request_queue *queue;
+
+static struct gendisk *disk;
+
+static int my_open(struct block_device *bdev, fmode_t mode){
+pr_info("Module device opened ...\n");
+return 0;
+}
+
+static void my_release(struct gendisk *gd, fmode_t mode){
+pr_info("Module device closed...\n");
+}
+
+static int my_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd, unsigned long arg){
+return -ENOTTY;
+}
+
+static struct block_device_operations fops={
+.owner=THIS_MODULE,
+.open=my_open,
+.release=my_release,
+.ioctl=my_ioctl,
+};
+
+static void my_request(struct my_request *q){
+struct request *req;
+while ((req=blk_fetch_request(q))!+NULL){
+struct bio_vec bvac;
+struct req_iterator itr;
+sector_t pos=blk rq pos(req);
+void *disk_mem=dev_data+pos*512;
+req_for_each_segment (bvac,req,itr){
+unsigned long len=bvac.bv_len;
+void *buffer=page_address(bvac.bv_page)+bvac.bv_offset;
+if (req_data_dir(req)=READ){
+memcpy(buffer, disk_mem,len);
+}
+else
+{
+memcpy(disk_mem,buffer,len);
+}
+disk_mem+=len;
+};
+__blk_end_request_all(req,0);
+}
+}
+
+struct int __init initalize(void){
+major_number=register_blk(0,DEVICE_NAME);
+if (major_number<=0){
+pr_err("DEVICE INSTALIZATION FAILED\N");
+return -EBUSY;
+}
+queue=blk_init_queue(my_request,NULL);
+if (!queue){
+unregister_blkdev(major_number,DEVICE_NAME);
+pr_err("BULK INSTALIZATION QUEUE FAILED\N");
+return -ENOMEM;
+}
+disk=alloc_disk(1);
+if (!disk){
+blk_cleanup_queue(queue);
+unregister_blkdev(major_number,DEVICE_NAME);
+pr_err("DISK ALLOCATION FAILED\N");
+return -ENOMEM;
+}
+dev_data=vmalloc(DEVICE_CAPACITY*512);
+if (!dev_data){
+del_gendisk(disk);
+put_disk(disk);
+blk_cleanup_queue(queue);
+unregister_blkdev(major_number,DEVICE_NAME);
+pr_err("VMALLOC ALLOCATION FAILED\N");
+return -ENOMEM;
+}
+disk->major=major_number;
+disk->first_minor=0;
+disk->fops=&fops;
+disk->queue=queue;
+snprintf(disk->disk_name,32,DEVICE_NAME);
+set_capacity(disk,DEVICE_CAPACITY);
+add_disk(disk);
+pr_info(DEVICE_NAME "MODULED LOADED");
+return 0;
+}
+
+static void __exit close(void){
+del_gendisk(disk);
+put_disk(disk);
+blk_cleanup_queue(queue);
+unregister_blkdev(major_number,DEVICE_NAME);
+vfree(dev_data);
+pr_info(DEVICE_NAME "MODULE UNLOADED");
+}
+
+module_init(initalize);
+module_exit(close);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("LOGESH");
+MODULE_DESCRIPTION("BLOCK DRIVER");
